@@ -1,26 +1,43 @@
 <script setup>
 import Card from "../components/Card.vue";
 import { ref } from 'vue';
+import axios from 'axios';
 
-const croupierHand = ref([
-  {id: 1, suit: 'hearts', value: '8'},
-  {id: 2, suit: 'clubs', value: '2'},
-]);
+const croupierHand = ref([]);
+const playerHand = ref([]);
+const config = {headers: {
+    Authorization: `${localStorage.getItem('token')}`,
+  }
+};
+
+const play = async () => {
+  const token = localStorage.getItem('token');
+  //decode token
+  const payload = JSON.parse(atob(token.split('.')[1]));
+  const userId = payload.id;
+  const res = await axios.post(`http://localhost:3000/api/play/${userId}`,{}, config);
+  localStorage.setItem('currentGame', res.data._id);
+  croupierHand.value = res.data.manoCroupier;
+  playerHand.value = res.data.manoJugador;
+}
 
 </script>
 
 <template>
     <div class="game-screen">
 
+      <button class="play-button" @click="play">Play</button>
+
       <div class="croupier-hand">
-        <div v-for="card in croupierHand" :key="card.id">
-          <Card :suit="card.suit" :value="card.value"></Card>
+        <div v-for="card in croupierHand" :key="card._id">
+          <Card :suit="card.palo" :value="card.figura"></Card>
         </div>
       </div>
 
       <div class="player-hand">
-        <Card suit="diamonds" value="K"></Card>
-        <Card suit="hearts" value="A"></Card>
+        <div v-for="card in playerHand" :key="card._id" >
+          <Card :suit="card.palo" :value="card.figura"></Card>
+        </div>
       </div>
 
 
@@ -35,6 +52,16 @@ const croupierHand = ref([
   justify-content: space-between;
   height: 80vh;
   background-color: #025718;
+}
+
+.play-button{
+  padding: 10px;
+  font-size: 1.5em;
+  background-color: #f0f0f0;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 50px;
 }
 
 .player-hand, .croupier-hand{
