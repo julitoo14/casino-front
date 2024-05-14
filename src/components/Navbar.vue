@@ -46,7 +46,7 @@ onMounted(() => {
 
 <template>
   <header class="header">
-    <img class="logo" src="/cards.png" alt="Logo">
+    <img class="logo" src="/cards.png" draggable="false" alt="Logo">
     <h1 class="title">BetWild</h1>
     <div class="login">
       <div v-if="!logged" class="inputs">
@@ -65,7 +65,11 @@ onMounted(() => {
   grid-template-columns: 1fr 1fr 1fr;
   align-items: center;
   background-color: #f0f0f0;
-  padding: 5px;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 90px;
+
 }
 
 .logo {

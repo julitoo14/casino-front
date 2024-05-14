@@ -7,6 +7,7 @@ const cardColor = computed(() => {
   return props.suit === 'hearts' || props.suit === 'diamonds' ? 'red' : 'black';
 });
 
+
 const suitSymbol = computed(() => {
   switch (props.suit) {
     case 'hearts': return '&hearts;';
@@ -19,7 +20,7 @@ const suitSymbol = computed(() => {
 </script>
 
 <template>
-  <div class="card" :style="{ color: cardColor }">
+  <div class="card" :style="{color: cardColor }">
     <div class="card-value">{{ value }}</div>
     <div class="card-suit" v-html="suitSymbol"></div>
     <div class="card-value card-value-bottom">{{ value }}</div>
@@ -28,13 +29,27 @@ const suitSymbol = computed(() => {
 
 <style scoped>
 .card {
-  width: 120px;
+  width: 130px;
   height: 200px;
   border: 1px solid black;
   border-radius: 5px;
   background-color: white;
   position: relative;
   box-shadow: 0px 0px 5px rgba(0,0,0,0.3);
+  transition-duration: 0.3s;
+  animation: fadeIn 1s ease-in;
+}
+
+@keyframes fadeIn {
+  0% {opacity: 0; visibility: hidden}
+  1% {visibility: visible}
+  100% {opacity: 1; visibility: visible}
+}
+
+.card:hover {
+  transform: scale(1.1);
+  z-index: 1;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
 }
 
 .card-value {
